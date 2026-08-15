@@ -117,3 +117,55 @@ PWRSEQ:
         value: 0
       GPIOWAKE:
         value: 54
+_add:
+  CNN:
+    description: "CNN Accelerator."
+    baseAddress: 0x50000000
+    addressBlock:
+      offset: 0x00
+      size: 0x1004
+      usage: registers
+    registers:
+      CTL:
+        description: "FIFO control."
+        addressOffset: 0x00
+        access: read-write
+        resetValue: 0x00000000
+      STATUS:
+        description: "FIFO status."
+        addressOffset: 0x04
+        access: read-only
+        resetValue: 0x00000000
+        fields:
+          fifo_full:
+            description: "FIFO full. Bit n is set when FIFO n is full."
+            bitOffset: 0
+            bitWidth: 4
+      FIFO0:
+        description: "FIFO 0 data port."
+        addressOffset: 0x08
+        access: write-only
+      FIFO1:
+        description: "FIFO 1 data port."
+        addressOffset: 0x0c
+        access: write-only
+      FIFO2:
+        description: "FIFO 2 data port."
+        addressOffset: 0x10
+        access: write-only
+      FIFO3:
+        description: "FIFO 3 data port."
+        addressOffset: 0x14
+        access: write-only
+      AON:
+        description: "Always-on domain control. Written as zero during init."
+        addressOffset: 0x1000
+        access: read-write
+        resetValue: 0x00000000
+    interrupts:
+      CNN:
+        description: "CNN accelerator completion."
+        value: 117
+      CNN_FIFO:
+        description: "CNN accelerator FIFO."
+        value: 116

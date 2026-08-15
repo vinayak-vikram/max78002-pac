@@ -16245,6 +16245,81 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         </register>
       </registers>
     </peripheral>
+    <peripheral>
+      <name>CNN</name>
+      <description>CNN Accelerator.</description>
+      <baseAddress>0x50000000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x1004</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <interrupt>
+        <name>CNN</name>
+        <description>CNN accelerator completion.</description>
+        <value>117</value>
+      </interrupt>
+      <interrupt>
+        <name>CNN_FIFO</name>
+        <description>CNN accelerator FIFO.</description>
+        <value>116</value>
+      </interrupt>
+      <registers>
+        <register>
+          <name>CTL</name>
+          <description>FIFO control.</description>
+          <addressOffset>0x0</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+        <register>
+          <name>STATUS</name>
+          <description>FIFO status.</description>
+          <addressOffset>0x4</addressOffset>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>fifo_full</name>
+              <description>FIFO full. Bit n is set when FIFO n is full.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>FIFO0</name>
+          <description>FIFO 0 data port.</description>
+          <addressOffset>0x8</addressOffset>
+          <access>write-only</access>
+        </register>
+        <register>
+          <name>FIFO1</name>
+          <description>FIFO 1 data port.</description>
+          <addressOffset>0xC</addressOffset>
+          <access>write-only</access>
+        </register>
+        <register>
+          <name>FIFO2</name>
+          <description>FIFO 2 data port.</description>
+          <addressOffset>0x10</addressOffset>
+          <access>write-only</access>
+        </register>
+        <register>
+          <name>FIFO3</name>
+          <description>FIFO 3 data port.</description>
+          <addressOffset>0x14</addressOffset>
+          <access>write-only</access>
+        </register>
+        <register>
+          <name>AON</name>
+          <description>Always-on domain control. Written as zero during init.</description>
+          <addressOffset>0x1000</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+      </registers>
+    </peripheral>
     <peripheral derivedFrom="SPI0">
       <name>SPI1</name>
       <description>SPI peripheral. 1</description>
