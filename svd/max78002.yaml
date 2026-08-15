@@ -169,3 +169,73 @@ _add:
       CNN_FIFO:
         description: "CNN accelerator FIFO."
         value: 116
+  CNNX16_0:
+    description: "CNNx16 quadrant 0 control."
+    baseAddress: 0x51000000
+    addressBlock:
+      offset: 0x00
+      size: 0x10
+      usage: registers
+    registers:
+      CTL:
+        description: "Quadrant control. Bits other than those named below are
+          written only as part of documented composite values."
+        addressOffset: 0x00
+        access: read-write
+        resetValue: 0x00000000
+        fields:
+          en:
+            description: "Enable. Set to run the quadrant, cleared to halt it."
+            bitOffset: 0
+            bitWidth: 1
+          clk_en:
+            description: "Clock enable. Must be set before any other quadrant access."
+            bitOffset: 3
+            bitWidth: 1
+          irq:
+            description: "Interrupt flag. Write zero to acknowledge."
+            bitOffset: 12
+            bitWidth: 1
+      SRAM:
+        description: "SRAM control. Written as a composite value; no documented fields."
+        addressOffset: 0x04
+        access: read-write
+        resetValue: 0x00000000
+      LCNT:
+        description: "Layer count."
+        addressOffset: 0x08
+        access: read-write
+        resetValue: 0x00000000
+        fields:
+          last:
+            description: "Index of the last layer to execute."
+            bitOffset: 0
+            bitWidth: 8
+          start:
+            description: "Index of the first layer to execute."
+            bitOffset: 8
+            bitWidth: 8
+      TEST:
+        description: "Register clear and memory BIST control. Written as a
+          composite value; only the completion flag below is named."
+        addressOffset: 0x0c
+        access: read-write
+        resetValue: 0x00000000
+        fields:
+          clear_done:
+            description: "Register clear complete."
+            bitOffset: 25
+            bitWidth: 1
+            access: read-only
+  CNNX16_1:
+    derivedFrom: CNNX16_0
+    description: "CNNx16 quadrant 1 control."
+    baseAddress: 0x52000000
+  CNNX16_2:
+    derivedFrom: CNNX16_0
+    description: "CNNx16 quadrant 2 control."
+    baseAddress: 0x53000000
+  CNNX16_3:
+    derivedFrom: CNNX16_0
+    description: "CNNx16 quadrant 3 control."
+    baseAddress: 0x54000000

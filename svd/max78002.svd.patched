@@ -16320,6 +16320,104 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         </register>
       </registers>
     </peripheral>
+    <peripheral>
+      <name>CNNX16_0</name>
+      <description>CNNx16 quadrant 0 control.</description>
+      <baseAddress>0x51000000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x10</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <name>CTL</name>
+          <description>Quadrant control. Bits other than those named below are written only as part of documented composite values.</description>
+          <addressOffset>0x0</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>en</name>
+              <description>Enable. Set to run the quadrant, cleared to halt it.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>clk_en</name>
+              <description>Clock enable. Must be set before any other quadrant access.</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>irq</name>
+              <description>Interrupt flag. Write zero to acknowledge.</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>SRAM</name>
+          <description>SRAM control. Written as a composite value; no documented fields.</description>
+          <addressOffset>0x4</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+        <register>
+          <name>LCNT</name>
+          <description>Layer count.</description>
+          <addressOffset>0x8</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>last</name>
+              <description>Index of the last layer to execute.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+            <field>
+              <name>start</name>
+              <description>Index of the first layer to execute.</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>TEST</name>
+          <description>Register clear and memory BIST control. Written as a composite value; only the completion flag below is named.</description>
+          <addressOffset>0xC</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>clear_done</name>
+              <description>Register clear complete.</description>
+              <bitOffset>25</bitOffset>
+              <bitWidth>1</bitWidth>
+              <access>read-only</access>
+            </field>
+          </fields>
+        </register>
+      </registers>
+    </peripheral>
+    <peripheral derivedFrom="CNNX16_0">
+      <name>CNNX16_1</name>
+      <description>CNNx16 quadrant 1 control.</description>
+      <baseAddress>0x52000000</baseAddress>
+    </peripheral>
+    <peripheral derivedFrom="CNNX16_0">
+      <name>CNNX16_2</name>
+      <description>CNNx16 quadrant 2 control.</description>
+      <baseAddress>0x53000000</baseAddress>
+    </peripheral>
+    <peripheral derivedFrom="CNNX16_0">
+      <name>CNNX16_3</name>
+      <description>CNNx16 quadrant 3 control.</description>
+      <baseAddress>0x54000000</baseAddress>
+    </peripheral>
     <peripheral derivedFrom="SPI0">
       <name>SPI1</name>
       <description>SPI peripheral. 1</description>
