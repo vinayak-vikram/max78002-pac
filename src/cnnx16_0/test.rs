@@ -2,9 +2,23 @@
 pub type R = crate::R<TestSpec>;
 #[doc = "Register `TEST` writer"]
 pub type W = crate::W<TestSpec>;
+#[doc = "Field `bist_err` reader - Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file."]
+pub type BistErrR = crate::FieldReader;
+#[doc = "Field `bist_done` reader - Memory BIST complete. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file."]
+pub type BistDoneR = crate::FieldReader;
 #[doc = "Field `clear_done` reader - Register clear complete."]
 pub type ClearDoneR = crate::BitReader;
 impl R {
+    #[doc = "Bits 14:17 - Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file."]
+    #[inline(always)]
+    pub fn bist_err(&self) -> BistErrR {
+        BistErrR::new(((self.bits >> 14) & 0x0f) as u8)
+    }
+    #[doc = "Bits 18:21 - Memory BIST complete. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file."]
+    #[inline(always)]
+    pub fn bist_done(&self) -> BistDoneR {
+        BistDoneR::new(((self.bits >> 18) & 0x0f) as u8)
+    }
     #[doc = "Bit 25 - Register clear complete."]
     #[inline(always)]
     pub fn clear_done(&self) -> ClearDoneR {

@@ -16393,6 +16393,20 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
           <resetValue>0x00000000</resetValue>
           <fields>
             <field>
+              <name>bist_err</name>
+              <description>Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file.</description>
+              <bitOffset>14</bitOffset>
+              <bitWidth>4</bitWidth>
+              <access>read-only</access>
+            </field>
+            <field>
+              <name>bist_done</name>
+              <description>Memory BIST complete. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file.</description>
+              <bitOffset>18</bitOffset>
+              <bitWidth>4</bitWidth>
+              <access>read-only</access>
+            </field>
+            <field>
               <name>clear_done</name>
               <description>Register clear complete.</description>
               <bitOffset>25</bitOffset>
