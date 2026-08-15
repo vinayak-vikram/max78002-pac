@@ -1,0 +1,119 @@
+# Path to the SVD file we're targeting. Relative to this file.
+# This must be included only in the device YAML file.
+_svd: "./max78002.svd"
+
+_modify:
+  # Naming fixes:
+  # - Multiple instances of a peripheral should be named with a number suffix.
+  # - The SVD file leaves off the instance number for the first instance of
+  #   several peripherals (e.g. "UART" instead of "UART0").
+  # - Some interrupt names are also inaccurate compared to the IRQ table in
+  #   MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78002/Include/max78002.h.
+  CAMERAIF:
+    interrupts:
+      CameraIF:
+        name: "PCIF"
+  FLC:
+    interrupts:
+      Flash_Controller:
+        name: "FLC0"
+  OWM:
+    interrupts:
+      OneWire:
+        name: "OWM"
+  PT:
+    name: "PT0"
+  TMR:
+    name: "TMR0"
+    interrupts:
+      TMR:
+        name: "TMR0"
+  UART:
+    name: "UART0"
+  WDT:
+    name: "WDT0"
+    interrupts:
+      WWDT:
+        name: "WDT0"
+
+SDHC:
+  # SDR104 is declared with a bit width of zero.
+  CFG_1:
+    _modify:
+      SDR104:
+        bitWidth: 1
+
+WUT:
+  # The wakeup timer prescaler is a 4-bit value split across PRES (bits 3-5)
+  # and PRES3 (bit 8). The SVD lists the encodings of the combined value in
+  # both fields, which assigns the same raw value to several names.
+  CTRL:
+    PRES:
+      _replace_enum:
+        DIV1: [0, "Divide by 1 (PRES3 = 0)."]
+        DIV2: [1, "Divide by 2 (PRES3 = 0)."]
+        DIV4: [2, "Divide by 4 (PRES3 = 0)."]
+        DIV8: [3, "Divide by 8 (PRES3 = 0)."]
+        DIV16: [4, "Divide by 16 (PRES3 = 0)."]
+        DIV32: [5, "Divide by 32 (PRES3 = 0)."]
+        DIV64: [6, "Divide by 64 (PRES3 = 0)."]
+        DIV128: [7, "Divide by 128 (PRES3 = 0)."]
+    PRES3:
+      _replace_enum:
+        LOW: [0, "Prescaler bit 3 clear: PRES selects divide by 1 to 128."]
+        HIGH: [1, "Prescaler bit 3 set: PRES selects divide by 256 to 4096."]
+
+# Interrupts that are missing from the SVD. Values are the device interrupt
+# numbers from the IRQn_Type table in max78002.h (Arm core, not RISC-V).
+AES:
+  _add:
+    _interrupts:
+      AES:
+        value: 97
+CRC:
+  _add:
+    _interrupts:
+      CRC:
+        value: 98
+CSI2:
+  _add:
+    _interrupts:
+      CSI2:
+        value: 104
+SIMO:
+  _add:
+    _interrupts:
+      SIMO:
+        value: 84
+UART0:
+  _add:
+    _interrupts:
+      UART0:
+        value: 14
+UART1:
+  _add:
+    _interrupts:
+      UART1:
+        value: 15
+UART2:
+  _add:
+    _interrupts:
+      UART2:
+        value: 34
+UART3:
+  _add:
+    _interrupts:
+      UART3:
+        value: 88
+USBHS:
+  _add:
+    _interrupts:
+      USBDMA:
+        value: 80
+PWRSEQ:
+  _add:
+    _interrupts:
+      PF:
+        value: 0
+      GPIOWAKE:
+        value: 54

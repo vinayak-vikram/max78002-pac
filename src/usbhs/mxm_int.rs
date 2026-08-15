@@ -1,0 +1,49 @@
+#[doc = "Register `MXM_INT` reader"]
+pub type R = crate::R<MxmIntSpec>;
+#[doc = "Register `MXM_INT` writer"]
+pub type W = crate::W<MxmIntSpec>;
+#[doc = "Field `VBUS` reader - VBUS"]
+pub type VbusR = crate::BitReader;
+#[doc = "Field `VBUS` writer - VBUS"]
+pub type VbusW<'a, REG> = crate::BitWriter<'a, REG>;
+#[doc = "Field `NOVBUS` reader - NOVBUS"]
+pub type NovbusR = crate::BitReader;
+#[doc = "Field `NOVBUS` writer - NOVBUS"]
+pub type NovbusW<'a, REG> = crate::BitWriter<'a, REG>;
+impl R {
+    #[doc = "Bit 0 - VBUS"]
+    #[inline(always)]
+    pub fn vbus(&self) -> VbusR {
+        VbusR::new((self.bits & 1) != 0)
+    }
+    #[doc = "Bit 1 - NOVBUS"]
+    #[inline(always)]
+    pub fn novbus(&self) -> NovbusR {
+        NovbusR::new(((self.bits >> 1) & 1) != 0)
+    }
+}
+impl W {
+    #[doc = "Bit 0 - VBUS"]
+    #[inline(always)]
+    pub fn vbus(&mut self) -> VbusW<'_, MxmIntSpec> {
+        VbusW::new(self, 0)
+    }
+    #[doc = "Bit 1 - NOVBUS"]
+    #[inline(always)]
+    pub fn novbus(&mut self) -> NovbusW<'_, MxmIntSpec> {
+        NovbusW::new(self, 1)
+    }
+}
+#[doc = "USB Added Maxim Interrupt Flag Register.\n\nYou can [`read`](crate::Reg::read) this register and get [`mxm_int::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`mxm_int::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct MxmIntSpec;
+impl crate::RegisterSpec for MxmIntSpec {
+    type Ux = u32;
+}
+#[doc = "`read()` method returns [`mxm_int::R`](R) reader structure"]
+impl crate::Readable for MxmIntSpec {}
+#[doc = "`write(|w| ..)` method takes [`mxm_int::W`](W) writer structure"]
+impl crate::Writable for MxmIntSpec {
+    type Safety = crate::Unsafe;
+}
+#[doc = "`reset()` method sets MXM_INT to value 0"]
+impl crate::Resettable for MxmIntSpec {}
