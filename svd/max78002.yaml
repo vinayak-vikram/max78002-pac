@@ -222,6 +222,18 @@ _add:
         access: read-write
         resetValue: 0x00000000
         fields:
+          bist_err:
+            description: "Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM,
+              bit 2 tornado SRAM, bit 3 bias register file."
+            bitOffset: 14
+            bitWidth: 4
+            access: read-only
+          bist_done:
+            description: "Memory BIST complete. Bit 0 data SRAM, bit 1 mask SRAM,
+              bit 2 tornado SRAM, bit 3 bias register file."
+            bitOffset: 18
+            bitWidth: 4
+            access: read-only
           clear_done:
             description: "Register clear complete."
             bitOffset: 25
