@@ -69,6 +69,8 @@ extern "C" {
     fn I2S();
     fn LPCMP();
     fn CSI2();
+    fn CNN_FIFO();
+    fn CNN();
 }
 #[doc(hidden)]
 #[repr(C)]
@@ -80,7 +82,7 @@ pub union Vector {
 #[doc(hidden)]
 #[link_section = ".vector_table.interrupts"]
 #[no_mangle]
-pub static __INTERRUPTS: [Vector; 105] = [
+pub static __INTERRUPTS: [Vector; 118] = [
     Vector { _handler: PF },
     Vector { _handler: WDT0 },
     Vector { _handler: USB },
@@ -186,6 +188,19 @@ pub static __INTERRUPTS: [Vector; 105] = [
     Vector { _reserved: 0 },
     Vector { _handler: LPCMP },
     Vector { _handler: CSI2 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _reserved: 0 },
+    Vector { _handler: CNN_FIFO },
+    Vector { _handler: CNN },
 ];
 #[doc = r"Enumeration of all the interrupts."]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -303,6 +318,10 @@ pub enum Interrupt {
     LPCMP = 103,
     #[doc = "104 - CSI2"]
     CSI2 = 104,
+    #[doc = "116 - CNN accelerator FIFO."]
+    CNN_FIFO = 116,
+    #[doc = "117 - CNN accelerator completion."]
+    CNN = 117,
 }
 unsafe impl cortex_m::interrupt::InterruptNumber for Interrupt {
     #[inline(always)]
@@ -643,6 +662,15 @@ impl core::fmt::Debug for Spi0 {
 }
 #[doc = "SPI peripheral."]
 pub mod spi0;
+#[doc = "CNN Accelerator."]
+pub type Cnn = crate::Periph<cnn::RegisterBlock, 0x5000_0000>;
+impl core::fmt::Debug for Cnn {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Cnn").finish()
+    }
+}
+#[doc = "CNN Accelerator."]
+pub mod cnn;
 #[doc = "SPI peripheral. 1"]
 pub type Spi1 = crate::Periph<spi0::RegisterBlock, 0x4004_6000>;
 impl core::fmt::Debug for Spi1 {
@@ -875,6 +903,8 @@ pub struct Peripherals {
     pub sir: Sir,
     #[doc = "SPI0"]
     pub spi0: Spi0,
+    #[doc = "CNN"]
+    pub cnn: Cnn,
     #[doc = "SPI1"]
     pub spi1: Spi1,
     #[doc = "TMR0"]
@@ -968,6 +998,7 @@ impl Peripherals {
             simo: Simo::steal(),
             sir: Sir::steal(),
             spi0: Spi0::steal(),
+            cnn: Cnn::steal(),
             spi1: Spi1::steal(),
             tmr0: Tmr0::steal(),
             tmr1: Tmr1::steal(),
