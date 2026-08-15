@@ -1,6 +1,6 @@
 [package]
 name = "max78002-pac"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Vinayak Vikram"]
 edition = "2021"
 license = "Apache-2.0"

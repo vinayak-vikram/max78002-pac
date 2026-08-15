@@ -14,7 +14,7 @@ This crate is generated from the SVD file in [Analog Devices' MSDK](https://gith
 - `SDHC.CFG_1.SDR104`, which is declared with a bit width of zero.
 - `WUT.CTRL.PRES` / `WUT.CTRL.PRES3`, which both enumerate the combined 4-bit prescaler encoding and therefore assign the same raw value to several names.
 
-The CNN accelerator is not described by the vendor SVD and is therefore absent from this crate.
+We patched the vendor SVD to add CNN accelerator support.
 
 ## Provenance
 
