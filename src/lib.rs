@@ -671,6 +671,42 @@ impl core::fmt::Debug for Cnn {
 }
 #[doc = "CNN Accelerator."]
 pub mod cnn;
+#[doc = "CNNx16 quadrant 0 control."]
+pub type Cnnx16_0 = crate::Periph<cnnx16_0::RegisterBlock, 0x5100_0000>;
+impl core::fmt::Debug for Cnnx16_0 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Cnnx16_0").finish()
+    }
+}
+#[doc = "CNNx16 quadrant 0 control."]
+pub mod cnnx16_0;
+#[doc = "CNNx16 quadrant 1 control."]
+pub type Cnnx16_1 = crate::Periph<cnnx16_0::RegisterBlock, 0x5200_0000>;
+impl core::fmt::Debug for Cnnx16_1 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Cnnx16_1").finish()
+    }
+}
+#[doc = "CNNx16 quadrant 1 control."]
+pub use self::cnnx16_0 as cnnx16_1;
+#[doc = "CNNx16 quadrant 2 control."]
+pub type Cnnx16_2 = crate::Periph<cnnx16_0::RegisterBlock, 0x5300_0000>;
+impl core::fmt::Debug for Cnnx16_2 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Cnnx16_2").finish()
+    }
+}
+#[doc = "CNNx16 quadrant 2 control."]
+pub use self::cnnx16_0 as cnnx16_2;
+#[doc = "CNNx16 quadrant 3 control."]
+pub type Cnnx16_3 = crate::Periph<cnnx16_0::RegisterBlock, 0x5400_0000>;
+impl core::fmt::Debug for Cnnx16_3 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Cnnx16_3").finish()
+    }
+}
+#[doc = "CNNx16 quadrant 3 control."]
+pub use self::cnnx16_0 as cnnx16_3;
 #[doc = "SPI peripheral. 1"]
 pub type Spi1 = crate::Periph<spi0::RegisterBlock, 0x4004_6000>;
 impl core::fmt::Debug for Spi1 {
@@ -905,6 +941,14 @@ pub struct Peripherals {
     pub spi0: Spi0,
     #[doc = "CNN"]
     pub cnn: Cnn,
+    #[doc = "CNNX16_0"]
+    pub cnnx16_0: Cnnx16_0,
+    #[doc = "CNNX16_1"]
+    pub cnnx16_1: Cnnx16_1,
+    #[doc = "CNNX16_2"]
+    pub cnnx16_2: Cnnx16_2,
+    #[doc = "CNNX16_3"]
+    pub cnnx16_3: Cnnx16_3,
     #[doc = "SPI1"]
     pub spi1: Spi1,
     #[doc = "TMR0"]
@@ -999,6 +1043,10 @@ impl Peripherals {
             sir: Sir::steal(),
             spi0: Spi0::steal(),
             cnn: Cnn::steal(),
+            cnnx16_0: Cnnx16_0::steal(),
+            cnnx16_1: Cnnx16_1::steal(),
+            cnnx16_2: Cnnx16_2::steal(),
+            cnnx16_3: Cnnx16_3::steal(),
             spi1: Spi1::steal(),
             tmr0: Tmr0::steal(),
             tmr1: Tmr1::steal(),
