@@ -22,7 +22,7 @@ impl RegisterBlock {
     pub const fn lcnt(&self) -> &Lcnt {
         &self.lcnt
     }
-    #[doc = "0x0c - Register clear and memory BIST control. Written as a composite value; only the completion flag below is named."]
+    #[doc = "0x0c - Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do."]
     #[inline(always)]
     pub const fn test(&self) -> &Test {
         &self.test
@@ -43,8 +43,8 @@ pub mod sram;
 pub type Lcnt = crate::Reg<lcnt::LcntSpec>;
 #[doc = "Layer count."]
 pub mod lcnt;
-#[doc = "TEST (rw) register accessor: Register clear and memory BIST control. Written as a composite value; only the completion flag below is named.\n\nYou can [`read`](crate::Reg::read) this register and get [`test::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`test::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@test`] module"]
+#[doc = "TEST (rw) register accessor: Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do.\n\nYou can [`read`](crate::Reg::read) this register and get [`test::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`test::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@test`] module"]
 #[doc(alias = "TEST")]
 pub type Test = crate::Reg<test::TestSpec>;
-#[doc = "Register clear and memory BIST control. Written as a composite value; only the completion flag below is named."]
+#[doc = "Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do."]
 pub mod test;

@@ -16339,9 +16339,15 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
           <fields>
             <field>
               <name>en</name>
-              <description>Enable. Set to run the quadrant, cleared to halt it.</description>
+              <description>Enable. During arming this is set on the non-master quadrants and left clear on the master; the master receives it in the final start write.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>rdy_sel</name>
+              <description>APB ready wait select.</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>2</bitWidth>
             </field>
             <field>
               <name>clk_en</name>
@@ -16350,9 +16356,123 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
               <bitWidth>1</bitWidth>
             </field>
             <field>
+              <name>ext_rdy</name>
+              <description>External ready.</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>no_pipeline</name>
+              <description>Disable the pipeline. Note the inverted sense: set this to select non-pipelined mode, which is limited to 50MHz.</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>stream_chw</name>
+              <description>Start layer is both streaming and CHW format.</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>apbclkena</name>
+              <description>Keep the APB clock enabled so registers remain readable while the state machine runs. Required when using the snoop registers.</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>oneshot</name>
+              <description>One-shot mode.</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>master</name>
+              <description>Index of the master quadrant.</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>ext_sync</name>
+              <description>External sync. Set on every quadrant during arming, and set globally when a FIFO is in use.</description>
+              <bitOffset>11</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
               <name>irq</name>
-              <description>Interrupt flag. Write zero to acknowledge.</description>
+              <description>Completion flag. Write zero to acknowledge.</description>
               <bitOffset>12</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>pool_rnd</name>
+              <description>Average pool rounding.</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>stream_en</name>
+              <description>Any layer uses streaming.</description>
+              <bitOffset>14</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>fifo_en</name>
+              <description>FIFO enabled for this quadrant.</description>
+              <bitOffset>15</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>mlat_en</name>
+              <description>Mlator enable. Used only on the mlator unload path.</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>mlat_sel</name>
+              <description>Mlator byte select; each byte maps to a channel.</description>
+              <bitOffset>17</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>stream_fifo</name>
+              <description>Set only when FIFO and streaming are both active.</description>
+              <bitOffset>19</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>mexpress</name>
+              <description>Compressed kernel load format.</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>simple1b</name>
+              <description>Simple 1-bit weight mode.</description>
+              <bitOffset>21</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>fast_fifo</name>
+              <description>Source is the fast FIFO rather than the APB FIFO.</description>
+              <bitOffset>22</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>fifo_group</name>
+              <description>Fast FIFO group mode.</description>
+              <bitOffset>23</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>bin_weights</name>
+              <description>Binary weights present in the network.</description>
+              <bitOffset>30</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>qupac</name>
+              <description>Replicate the input map across all four quadrants.</description>
+              <bitOffset>31</bitOffset>
               <bitWidth>1</bitWidth>
             </field>
           </fields>
@@ -16387,11 +16507,47 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         </register>
         <register>
           <name>TEST</name>
-          <description>Register clear and memory BIST control. Written as a composite value; only the completion flag below is named.</description>
+          <description>Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do.</description>
           <addressOffset>0xC</addressOffset>
           <access>read-write</access>
           <resetValue>0x00000000</resetValue>
           <fields>
+            <field>
+              <name>data_run</name>
+              <description>Run the data SRAM BIST.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>mask_run</name>
+              <description>Run the mask RAM BIST.</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>tram_run</name>
+              <description>Run the TRAM BIST.</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>bias_run</name>
+              <description>Run the bias register file BIST.</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>zero_run</name>
+              <description>Run zeroization. Mandatory during initialization on this device.</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>bias_sel</name>
+              <description>Include the bias register file in the operation. Set for zeroization only when the network uses bias.</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
             <field>
               <name>bist_err</name>
               <description>Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM, bit 2 tornado SRAM, bit 3 bias register file.</description>
@@ -16407,8 +16563,8 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
               <access>read-only</access>
             </field>
             <field>
-              <name>clear_done</name>
-              <description>Register clear complete.</description>
+              <name>zero_done</name>
+              <description>Zeroization complete.</description>
               <bitOffset>25</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-only</access>
