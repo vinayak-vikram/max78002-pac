@@ -111,7 +111,7 @@ impl W {
         BiasSelW::new(self, 10)
     }
 }
-#[doc = "Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do.\n\nYou can [`read`](crate::Reg::read) this register and get [`test::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`test::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+#[doc = "Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Bits 13 to 11 are engine-coupled qualifiers that cannot be varied independently; use the documented composite command values.\n\nYou can [`read`](crate::Reg::read) this register and get [`test::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`test::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
 pub struct TestSpec;
 impl crate::RegisterSpec for TestSpec {
     type Ux = u32;

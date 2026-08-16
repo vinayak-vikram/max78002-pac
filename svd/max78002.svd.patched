@@ -16246,8 +16246,74 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
       </registers>
     </peripheral>
     <peripheral>
+      <name>CNN_FIFO</name>
+      <description>CNN accelerator fast FIFO. A separate APB peripheral from the CNN block, used as a high-rate input path to the accelerator.</description>
+      <baseAddress>0x400C0400</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x18</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <interrupt>
+        <name>CNN_FIFO</name>
+        <description>CNN accelerator fast FIFO.</description>
+        <value>116</value>
+      </interrupt>
+      <registers>
+        <register>
+          <name>CR</name>
+          <description>Control register.</description>
+          <addressOffset>0x0</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>thresh</name>
+              <description>FIFO threshold.</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>SR</name>
+          <description>Status register.</description>
+          <addressOffset>0x4</addressOffset>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+        <register>
+          <name>IE</name>
+          <description>Interrupt enable register.</description>
+          <addressOffset>0x8</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+        <register>
+          <name>IS</name>
+          <description>Interrupt status register.</description>
+          <addressOffset>0xC</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+        <register>
+          <name>DR</name>
+          <description>Data register.</description>
+          <addressOffset>0x10</addressOffset>
+          <access>write-only</access>
+        </register>
+        <register>
+          <name>DMA</name>
+          <description>DMA register. Reserved; not supported by the vendor tooling.</description>
+          <addressOffset>0x14</addressOffset>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+        </register>
+      </registers>
+    </peripheral>
+    <peripheral>
       <name>CNN</name>
-      <description>CNN Accelerator.</description>
+      <description>Convolutional Neural Network Accelerator, global control.</description>
       <baseAddress>0x50000000</baseAddress>
       <addressBlock>
         <offset>0x0</offset>
@@ -16259,11 +16325,6 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         <description>CNN accelerator completion.</description>
         <value>117</value>
       </interrupt>
-      <interrupt>
-        <name>CNN_FIFO</name>
-        <description>CNN accelerator FIFO.</description>
-        <value>116</value>
-      </interrupt>
       <registers>
         <register>
           <name>CTL</name>
@@ -16271,6 +16332,38 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
           <addressOffset>0x0</addressOffset>
           <access>read-write</access>
           <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>rdy_sel</name>
+              <description>APB ready wait select.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>thresh_a</name>
+              <description>FIFO threshold A.</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>5</bitWidth>
+            </field>
+            <field>
+              <name>thresh_b</name>
+              <description>FIFO threshold B.</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+            <field>
+              <name>cpl</name>
+              <description>FIFO completion. Not used on this device.</description>
+              <bitOffset>11</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>quad_en</name>
+              <description>FIFO enable per quadrant. Bit n enables the FIFO for quadrant n.</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+          </fields>
         </register>
         <register>
           <name>STATUS</name>
@@ -16313,10 +16406,24 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         </register>
         <register>
           <name>AON</name>
-          <description>Always-on domain control. Written as zero during init.</description>
+          <description>Always-on domain control. Reset to zero during initialization.</description>
           <addressOffset>0x1000</addressOffset>
           <access>read-write</access>
           <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>rdy_sel</name>
+              <description>APB ready wait select for the always-on domain.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>quad_pd</name>
+              <description>Quadrant power down. Bit n powers down quadrant n and is set for each quadrant the network does not use.</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+          </fields>
         </register>
       </registers>
     </peripheral>
@@ -16507,7 +16614,7 @@ signal(s) on transition(s) from low to high or high to low when PM.USBWKEN is se
         </register>
         <register>
           <name>TEST</name>
-          <description>Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Not exactly sure what bits 13 to 11 do.</description>
+          <description>Register clear and memory BIST control. Run bits are write-1, then poll the matching done bit, then write zero to reset. Bits 13 to 11 are engine-coupled qualifiers that cannot be varied independently; use the documented composite command values.</description>
           <addressOffset>0xC</addressOffset>
           <access>read-write</access>
           <resetValue>0x00000000</resetValue>

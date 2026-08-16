@@ -318,7 +318,7 @@ pub enum Interrupt {
     LPCMP = 103,
     #[doc = "104 - CSI2"]
     CSI2 = 104,
-    #[doc = "116 - CNN accelerator FIFO."]
+    #[doc = "116 - CNN accelerator fast FIFO."]
     CNN_FIFO = 116,
     #[doc = "117 - CNN accelerator completion."]
     CNN = 117,
@@ -662,14 +662,23 @@ impl core::fmt::Debug for Spi0 {
 }
 #[doc = "SPI peripheral."]
 pub mod spi0;
-#[doc = "CNN Accelerator."]
+#[doc = "CNN accelerator fast FIFO. A separate APB peripheral from the CNN block, used as a high-rate input path to the accelerator."]
+pub type CnnFifo = crate::Periph<cnn_fifo::RegisterBlock, 0x400c_0400>;
+impl core::fmt::Debug for CnnFifo {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("CnnFifo").finish()
+    }
+}
+#[doc = "CNN accelerator fast FIFO. A separate APB peripheral from the CNN block, used as a high-rate input path to the accelerator."]
+pub mod cnn_fifo;
+#[doc = "Convolutional Neural Network Accelerator, global control."]
 pub type Cnn = crate::Periph<cnn::RegisterBlock, 0x5000_0000>;
 impl core::fmt::Debug for Cnn {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Cnn").finish()
     }
 }
-#[doc = "CNN Accelerator."]
+#[doc = "Convolutional Neural Network Accelerator, global control."]
 pub mod cnn;
 #[doc = "CNNx16 quadrant 0 control."]
 pub type Cnnx16_0 = crate::Periph<cnnx16_0::RegisterBlock, 0x5100_0000>;
@@ -939,6 +948,8 @@ pub struct Peripherals {
     pub sir: Sir,
     #[doc = "SPI0"]
     pub spi0: Spi0,
+    #[doc = "CNN_FIFO"]
+    pub cnn_fifo: CnnFifo,
     #[doc = "CNN"]
     pub cnn: Cnn,
     #[doc = "CNNX16_0"]
@@ -1042,6 +1053,7 @@ impl Peripherals {
             simo: Simo::steal(),
             sir: Sir::steal(),
             spi0: Spi0::steal(),
+            cnn_fifo: CnnFifo::steal(),
             cnn: Cnn::steal(),
             cnnx16_0: Cnnx16_0::steal(),
             cnnx16_1: Cnnx16_1::steal(),
