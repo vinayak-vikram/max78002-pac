@@ -119,7 +119,7 @@ PWRSEQ:
         value: 54
 _add:
   CNN:
-    description: "CNN Accelerator."
+    description: "Convolutional Neural Network Accelerator, global control."
     baseAddress: 0x50000000
     addressBlock:
       offset: 0x00
@@ -131,6 +131,28 @@ _add:
         addressOffset: 0x00
         access: read-write
         resetValue: 0x00000000
+        fields:
+          rdy_sel:
+            description: "APB ready wait select."
+            bitOffset: 0
+            bitWidth: 2
+          thresh_a:
+            description: "FIFO threshold A."
+            bitOffset: 2
+            bitWidth: 5
+          thresh_b:
+            description: "FIFO threshold B."
+            bitOffset: 7
+            bitWidth: 4
+          cpl:
+            description: "FIFO completion. Not used on this device."
+            bitOffset: 11
+            bitWidth: 1
+          quad_en:
+            description: "FIFO enable per quadrant. Bit n enables the FIFO for
+              quadrant n."
+            bitOffset: 12
+            bitWidth: 4
       STATUS:
         description: "FIFO status."
         addressOffset: 0x04
@@ -158,16 +180,70 @@ _add:
         addressOffset: 0x14
         access: write-only
       AON:
-        description: "Always-on domain control. Written as zero during init."
+        description: "Always-on domain control. Reset to zero during initialization."
         addressOffset: 0x1000
         access: read-write
         resetValue: 0x00000000
+        fields:
+          rdy_sel:
+            description: "APB ready wait select for the always-on domain."
+            bitOffset: 0
+            bitWidth: 2
+          quad_pd:
+            description: "Quadrant power down. Bit n powers down quadrant n and
+              is set for each quadrant the network does not use."
+            bitOffset: 12
+            bitWidth: 4
     interrupts:
       CNN:
         description: "CNN accelerator completion."
         value: 117
+  CNN_FIFO:
+    description: "CNN accelerator fast FIFO. A separate APB peripheral from the
+      CNN block, used as a high-rate input path to the accelerator."
+    baseAddress: 0x400C0400
+    addressBlock:
+      offset: 0x00
+      size: 0x18
+      usage: registers
+    registers:
+      CR:
+        description: "Control register."
+        addressOffset: 0x00
+        access: read-write
+        resetValue: 0x00000000
+        fields:
+          thresh:
+            description: "FIFO threshold."
+            bitOffset: 4
+            bitWidth: 4
+      SR:
+        description: "Status register."
+        addressOffset: 0x04
+        access: read-only
+        resetValue: 0x00000000
+      IE:
+        description: "Interrupt enable register."
+        addressOffset: 0x08
+        access: read-write
+        resetValue: 0x00000000
+      IS:
+        description: "Interrupt status register."
+        addressOffset: 0x0c
+        access: read-write
+        resetValue: 0x00000000
+      DR:
+        description: "Data register."
+        addressOffset: 0x10
+        access: write-only
+      DMA:
+        description: "DMA register. Reserved; not supported by the vendor tooling."
+        addressOffset: 0x14
+        access: read-write
+        resetValue: 0x00000000
+    interrupts:
       CNN_FIFO:
-        description: "CNN accelerator FIFO."
+        description: "CNN accelerator fast FIFO."
         value: 116
   CNNX16_0:
     description: "CNNx16 quadrant 0 control."
@@ -304,7 +380,8 @@ _add:
       TEST:
         description: "Register clear and memory BIST control. Run bits are
           write-1, then poll the matching done bit, then write zero to reset.
-          Not exactly sure what bits 13 to 11 do."
+          Bits 13 to 11 are engine-coupled qualifiers that cannot be varied
+          independently; use the documented composite command values."
         addressOffset: 0x0c
         access: read-write
         resetValue: 0x00000000
