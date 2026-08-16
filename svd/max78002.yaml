@@ -185,16 +185,102 @@ _add:
         resetValue: 0x00000000
         fields:
           en:
-            description: "Enable. Set to run the quadrant, cleared to halt it."
+            description: "Enable. During arming this is set on the non-master
+              quadrants and left clear on the master; the master receives it in
+              the final start write."
             bitOffset: 0
             bitWidth: 1
+          rdy_sel:
+            description: "APB ready wait select."
+            bitOffset: 1
+            bitWidth: 2
           clk_en:
             description: "Clock enable. Must be set before any other quadrant access."
             bitOffset: 3
             bitWidth: 1
+          ext_rdy:
+            description: "External ready."
+            bitOffset: 4
+            bitWidth: 1
+          no_pipeline:
+            description: "Disable the pipeline. Note the inverted sense: set
+              this to select non-pipelined mode, which is limited to 50MHz."
+            bitOffset: 5
+            bitWidth: 1
+          stream_chw:
+            description: "Start layer is both streaming and CHW format."
+            bitOffset: 6
+            bitWidth: 1
+          apbclkena:
+            description: "Keep the APB clock enabled so registers remain
+              readable while the state machine runs. Required when using the
+              snoop registers."
+            bitOffset: 7
+            bitWidth: 1
+          oneshot:
+            description: "One-shot mode."
+            bitOffset: 8
+            bitWidth: 1
+          master:
+            description: "Index of the master quadrant."
+            bitOffset: 9
+            bitWidth: 2
+          ext_sync:
+            description: "External sync. Set on every quadrant during arming,
+              and set globally when a FIFO is in use."
+            bitOffset: 11
+            bitWidth: 1
           irq:
-            description: "Interrupt flag. Write zero to acknowledge."
+            description: "Completion flag. Write zero to acknowledge."
             bitOffset: 12
+            bitWidth: 1
+          pool_rnd:
+            description: "Average pool rounding."
+            bitOffset: 13
+            bitWidth: 1
+          stream_en:
+            description: "Any layer uses streaming."
+            bitOffset: 14
+            bitWidth: 1
+          fifo_en:
+            description: "FIFO enabled for this quadrant."
+            bitOffset: 15
+            bitWidth: 1
+          mlat_en:
+            description: "Mlator enable. Used only on the mlator unload path."
+            bitOffset: 16
+            bitWidth: 1
+          mlat_sel:
+            description: "Mlator byte select; each byte maps to a channel."
+            bitOffset: 17
+            bitWidth: 2
+          stream_fifo:
+            description: "Set only when FIFO and streaming are both active."
+            bitOffset: 19
+            bitWidth: 1
+          mexpress:
+            description: "Compressed kernel load format."
+            bitOffset: 20
+            bitWidth: 1
+          simple1b:
+            description: "Simple 1-bit weight mode."
+            bitOffset: 21
+            bitWidth: 1
+          fast_fifo:
+            description: "Source is the fast FIFO rather than the APB FIFO."
+            bitOffset: 22
+            bitWidth: 1
+          fifo_group:
+            description: "Fast FIFO group mode."
+            bitOffset: 23
+            bitWidth: 1
+          bin_weights:
+            description: "Binary weights present in the network."
+            bitOffset: 30
+            bitWidth: 1
+          qupac:
+            description: "Replicate the input map across all four quadrants."
+            bitOffset: 31
             bitWidth: 1
       SRAM:
         description: "SRAM control. Written as a composite value; no documented fields."
@@ -216,12 +302,39 @@ _add:
             bitOffset: 8
             bitWidth: 8
       TEST:
-        description: "Register clear and memory BIST control. Written as a
-          composite value; only the completion flag below is named."
+        description: "Register clear and memory BIST control. Run bits are
+          write-1, then poll the matching done bit, then write zero to reset.
+          Not exactly sure what bits 13 to 11 do."
         addressOffset: 0x0c
         access: read-write
         resetValue: 0x00000000
         fields:
+          data_run:
+            description: "Run the data SRAM BIST."
+            bitOffset: 0
+            bitWidth: 1
+          mask_run:
+            description: "Run the mask RAM BIST."
+            bitOffset: 2
+            bitWidth: 1
+          tram_run:
+            description: "Run the TRAM BIST."
+            bitOffset: 4
+            bitWidth: 1
+          bias_run:
+            description: "Run the bias register file BIST."
+            bitOffset: 6
+            bitWidth: 1
+          zero_run:
+            description: "Run zeroization. Mandatory during initialization on
+              this device."
+            bitOffset: 7
+            bitWidth: 1
+          bias_sel:
+            description: "Include the bias register file in the operation. Set
+              for zeroization only when the network uses bias."
+            bitOffset: 10
+            bitWidth: 1
           bist_err:
             description: "Memory BIST error. Bit 0 data SRAM, bit 1 mask SRAM,
               bit 2 tornado SRAM, bit 3 bias register file."
@@ -234,8 +347,8 @@ _add:
             bitOffset: 18
             bitWidth: 4
             access: read-only
-          clear_done:
-            description: "Register clear complete."
+          zero_done:
+            description: "Zeroization complete."
             bitOffset: 25
             bitWidth: 1
             access: read-only
